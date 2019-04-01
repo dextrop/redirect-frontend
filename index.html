@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirect.co | short-url for all platforms</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: url("assets/images/background.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        .slogan {
+            position: absolute;
+            top: 30%;
+            width: 100%;
+            text-align: center;
+            color: white;
+        }
+        .create-url-button {
+            margin-top: 30px;
+            border: none;
+            border-radius: 0;
+            font-size: 30px;
+        }
+        .modal-content {
+            border-radius: 0;
+        }
+
+        .bd-callout-warning {
+            border-left-color: lightgreen!important;
+        }
+
+        .bd-callout {
+            padding: 1.25rem;
+            margin-top: 1.25rem;
+            margin-bottom: 1.25rem;
+            border: 1px solid #eee;
+            border-left-width: .25rem;
+            border-radius: .25rem;
+            width: 70%;
+            margin-left: 15%;
+            background: white;
+            color: #0e3042;
+        }
+        .highlight {
+            padding: 1rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            background-color: #f8f9fa;
+            -ms-overflow-style: -ms-autohiding-scrollbar;
+            text-align: left;
+            padding-left: 30px;
+        }
+        .btn-outline-primary {
+            border-radius: 0;
+            padding: 3px;
+            padding-left: 20px;
+            padding-right: 20px;
+            float: right;
+        }
+        #lastCreated {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+    <a class="navbar-brand" href="#" style="color: white!important;">Redirect</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <button class="btn btn-success my-2 my-sm-0" type="submit">Login</button>
+        </form>
+    </div>
+</nav>
+<main>
+    <div class="slogan">
+        <h3 style="text-transform: uppercase">Redirect URL's based on platforms.</h3>
+        <h5>Create your own platform base url.</h5>
+        <button class="btn btn-danger create-url-button" data-toggle="modal" data-target="#exampleModal">Create URL</button>
+
+
+        <div class="bd-callout bd-callout-warning" id="lastCreated">
+            <span class="highlighter-rouge" style="color: #4cae4c!important; font-size: 30px; text-transform: uppercase"> Last Generated</span><br>
+            <p style="text-align: left!important; padding-left: 30px">
+
+            Laptop: <code class="highlighter-rouge" id="laptop_created_url"></code><br>
+            iPhone: <code class="highlighter-rouge" id="iphone_created_url"></code><br>
+            Android: <code class="highlighter-rouge" id="android_created_url"></code><br>
+            </p>
+            <figure class="highlight" id="short_url">
+                https://redirec.co/ZaWsaY
+                <button type="button" class="btn btn-outline-primary pull-right">Copy</button>
+            </figure>
+
+        </div>
+    </div>
+
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="padding:8%;">
+                    <form>
+                        <div class="form-group row">
+                            <label for="laptop" class="col-sm-2 col-form-label">Laptops</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="laptop" placeholder="Laptops Redirect URl">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="iphone" class="col-sm-2 col-form-label">iPhone</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="iphone" placeholder="iPhone Redirect URl">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="android" class="col-sm-2 col-form-label">Android</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="android" placeholder="Android Redirect URL">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="createURL()">Create URL</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="assets/js/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    var created = JSON.parse(window.localStorage.getItem("last_created_redirect_co"));
+    if (created) {
+        try {
+            $('#laptop_created_url').html(
+                created["laptop"]
+            );
+
+
+            $('#iphone_created_url').html(
+                created["iphone"]
+            );
+
+
+            $('#android_created_url').html(
+                created["android"]
+            );
+
+            $('#short_url').html("https://f.redirec.co/" + created["url"]);
+
+            $('#lastCreated').css("display", "block");
+        } catch (e) {
+
+        }
+
+    }
+    function createURL() {
+        var data = {
+            "iphone": $('#iphone').val(),
+            "android": $('#android').val(),
+            "laptop": $('#laptop').val()
+        } ;
+
+        console.log(data);
+        $.ajax({
+            url: "https://api.redirec.co/create/short_url/",
+            type: 'POST',
+            beforeSend: function(request) {
+                request.setRequestHeader("Content-Type", "application/json");
+                // request.setRequestHeader("token", token);
+            },
+            data: JSON.stringify(data),
+            success: function (resp) {
+                console.log(resp);
+                window.localStorage.setItem("last_created_redirect_co", JSON.stringify(resp));
+                window.location.reload(true);
+            }, async: false
+        });
+    }
+</script>
+</body>
+</html>
